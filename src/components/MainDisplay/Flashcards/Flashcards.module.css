@@ -1,0 +1,17 @@
+.flashcard {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  width: 80vw;
+  height: 80vh;
+  font-size: 1.5rem;
+}
+
+.flashcard:hover {
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.flashcard p {
+  border-bottom: 2px solid white;
+}
