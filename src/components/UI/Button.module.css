@@ -1,0 +1,16 @@
+button {
+  background: whitesmoke;
+  border: none;
+  padding: 5px 0;
+  margin: 0.2rem 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+  border-radius: 15px;
+}
+
+button:hover {
+  color: white;
+  background: cornflowerblue;
+  opacity: 0.9;
+  transition: all 0.3s ease;
+}

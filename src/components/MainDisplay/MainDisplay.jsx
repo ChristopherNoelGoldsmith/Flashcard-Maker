@@ -4,10 +4,10 @@ import Flashcards from "./Flashcards/Flashcards";
 import NavMenu from "../Header/NavMenu";
 const MainDisplay = (props) => {
   return (
-    <div className={`row container my-5`}>
+    <div className={`row container justify-content-center my-5`}>
       <NavMenu />
-      <Flashcards />
-      {!(<MainForm />)}
+      {<MainForm />}
+      {!(<Flashcards />)}
     </div>
   );
 };
