@@ -1,26 +1,78 @@
 import Card from "../../UI/Card";
 import styles from "./Flashcards.module.css";
 import Button from "../../UI/Button";
+import React, { useState, Fragment, useEffect } from "react";
+import { loadFlashcardList } from "../../../util/localStorageUtil";
 
-const localStorageGetter = (cardSetTitle) => {
-  if (!cardSetTitle)
-    return alert("There is not a set of flashcard with that name available");
+const flashCardListHandler = (props) => {
+  const [event, flipState, flipEvent, incrimentFlashcard, flashcardIncriment] =
+    props;
+  //creates an array of the flashcards available in the selected local storage key
+  const loadedCardList = loadFlashcardList(event);
+  const flashCardList = loadedCardList.map((flashcard) => {
+    const { question, answer, title, key } = flashcard;
+
+    const changeFlashCard = (inc) => {
+      console.log(flashcardIncriment, loadedCardList.length);
+      if (flashcardIncriment <= 0 && inc === -1) return;
+      if (flashcardIncriment === loadedCardList.length - 1 && inc === 1) return;
+      if (flipState) flipEvent();
+      incrimentFlashcard((prevInc) => prevInc + inc);
+    };
+    //SHuffle algorith .sort((a, b) => 0.5 - Math.random());
+    return (
+      <Fragment key={key}>
+        <div className={`${styles.flashcard}`}>
+          <h2 className="my-3">{title}</h2>
+          {!flipState && (
+            <p className={`${styles.front}`} onClick={flipEvent}>
+              {question}
+            </p>
+          )}
+          {flipState && (
+            <p className={`${styles.back}`} onClick={flipEvent}>
+              {answer}
+            </p>
+          )}
+        </div>
+        <div className="row justify-content-around">
+          <Button
+            onClick={() => changeFlashCard(-1)}
+            className="col-5 mx-1"
+            label="Back"
+          />
+          <Button
+            onClick={() => changeFlashCard(1)}
+            className="col-5 mx-1"
+            label="Forward"
+          />
+        </div>
+      </Fragment>
+    );
+  });
+  return flashCardList[flashcardIncriment];
 };
-
 const Flashcards = (props) => {
-  const text = `Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates est quod fugit reprehenderit dolores veritatis consequatur voluptate eos asperiores sunt velit id nisi expedita fugiat quasi, rem, cumque recusandae ex!`;
+  const [cardSide, setCardSide] = useState(false);
+  const [cardList, setCardList] = useState("");
+  const [flashcardIncriment, incrimentFlashcard] = useState(0);
+  const flipCard = () => {
+    setCardSide((flip) => !flip);
+  };
 
-  return (
-    <Card className="justify-content-around">
-      <div className={`${styles.flashcard}`}>
-        <p>{text}</p>
-      </div>
-      <div className="row justify-content-around">
-        <Button className="col-5 mx-1" label="Back" />
-        <Button className="col-5 mx-1" label="Forward" />
-      </div>
-    </Card>
-  );
+  useEffect(() => {
+    const flashcardProps = [
+      props.chosenFlashCardList,
+      cardSide,
+      flipCard,
+      incrimentFlashcard,
+      flashcardIncriment,
+    ];
+    const flashcards = flashCardListHandler(flashcardProps);
+    setCardList(flashcards);
+  }, [props.chosenFlashCardList, cardSide, flashcardIncriment]);
+
+  return <Card className="justify-content-around">{cardList}</Card>;
 };
 
 export default Flashcards;

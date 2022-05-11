@@ -2,7 +2,13 @@
 
 ### Make an app able to create custom and randomized flashcards and save the sets to localstorage for the consumer.
 
-Will be built in React.js and use Bootstrap.
+A flashcard generator which utilizes localStorage API to store lists of flashcards for repeated use.
+
+#TO DO LIST
+[] Create a main splashscreen for login and options to create or load flashcards from page load.
+[] Clean UI (center text, fix overflow issues on mobile).
+[] Deepclean components so they are more seperate and reusable.
+[] Add ability to append images to flashcards.
 
 # Possiable component structure.
 

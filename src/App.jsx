@@ -1,5 +1,7 @@
 import styles from "./App.module.css";
 import MainDisplay from "./components/MainDisplay/MainDisplay";
+//import NavMenu from "./components/Header/NavMenu";
+
 function App() {
   return (
     <section

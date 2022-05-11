@@ -90,7 +90,7 @@ const MainForm = () => {
           value={cardState.answer || ""}
           required
         ></TextArea>
-        <Button type="submit" label="CREATE"></Button>
+        <Button type="submit" label="CREATE" />
       </form>
     </Card>
   );

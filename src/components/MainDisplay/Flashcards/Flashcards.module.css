@@ -1,5 +1,6 @@
 .flashcard {
   display: flex;
+  flex-direction: column;
   align-content: center;
   justify-content: center;
   width: 80vw;
@@ -14,4 +15,14 @@
 
 .flashcard p {
   border-bottom: 2px solid white;
+  height: 80%;
+}
+
+.flashcard .front {
+  border: 1px solid indianred;
+}
+
+.flashcard .back {
+  border: 1px solid skyblue;
+  border-radius: 10px;
 }

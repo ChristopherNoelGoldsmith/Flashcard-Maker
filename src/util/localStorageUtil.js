@@ -1,24 +1,19 @@
 export const getLocalStorageKeys = () => {
+  //runs a for loop on they keys in local storage to obtain all keys of the flashcard data
   let navList = [];
-  for (let each in localStorage) {
-    navList = [each, ...navList];
+  for (let i = 0; i < localStorage.length; i++) {
+    navList = [localStorage.key(i), ...navList];
   }
-  //this is a workaround needed due to the card values being obtained through their keys.
-  //because of this it also get the methods of the localStorage object, so to keep them from
-  //being inserted into the DOM or overwritten workarounds like the one below have been implimented.
-  navList = navList.filter((key) => {
-    if (
-      key === "setItem" ||
-      key === "removeItem" ||
-      key === "clear" ||
-      key === "length" ||
-      key === "getItem" ||
-      key === "key"
-    ) {
-      return false;
-    }
-    return true;
-  });
 
   return navList;
+};
+
+export const loadFlashcardList = (event) => {
+  //Obtains the flashcard list form lovalstorage through a string,
+  //destructures the data then returns it.
+  if (!localStorage.getItem(event))
+    return alert("No flashcard list with that name exists.");
+  let flashcard = localStorage.getItem(event);
+  flashcard = JSON.parse(flashcard);
+  return flashcard;
 };

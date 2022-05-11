@@ -8,11 +8,13 @@ import { getLocalStorageKeys } from "../../util/localStorageUtil";
 
 const getSavedFlashcards = (eventsToAdd) => {
   let navList = getLocalStorageKeys();
+  const [deleteFlashcardHandler, loadFlashCardHandler] = eventsToAdd;
   //This final section creates the JSX element that willbe inserted into the dom
   navList = navList.map((savedListItemName) => {
     return (
       <FlashcardListItem
-        onClick={eventsToAdd}
+        loadCard={loadFlashCardHandler}
+        deleteCard={deleteFlashcardHandler}
         key={`${Math.random() * 1000}${savedListItemName[0]}`}
       >
         {savedListItemName}
@@ -29,16 +31,29 @@ const FlashcardList = (props) => {
   const deleteFlashcardHandler = (event) => {
     const itemToDelete = event.target.parentNode.firstChild.innerText;
     localStorage.removeItem(itemToDelete);
-    const updatedList = getSavedFlashcards(deleteFlashcardHandler);
+
+    const updatedList = getSavedFlashcards([
+      deleteFlashcardHandler,
+      loadFlashCardHandler,
+    ]);
     setListState(updatedList);
+    props.changeWindow("MainForm");
+    props.setSavedCardsVisability();
+  };
+
+  const loadFlashCardHandler = (event) => {
+    console.log(event.target.innerText);
+    props.changeWindow("Flashcard");
+    props.chosenFlashCard(event.target.innerText);
+    props.setSavedCardsVisability();
   };
 
   //passes the deleteFlashcardHandler to make it useable in the FlashcardListItem component
   const [listState, setListState] = useState(() => {
-    return getSavedFlashcards(deleteFlashcardHandler);
+    return getSavedFlashcards([deleteFlashcardHandler, loadFlashCardHandler]);
   });
 
-  return <ul className="">{listState}</ul>;
+  return <ul className="row">{listState}</ul>;
 };
 
 export default FlashcardList;

@@ -7,6 +7,17 @@
 body {
   width: 100vw;
   color: ivory;
+  background: url("./img/background.jpg");
+}
+body::after {
+  content: "";
+  top: 0;
+  left: 0;
+  position: absolute;
+  background: rgba(20, 20, 240, 0.1);
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
 }
 .box {
   height: 100px;

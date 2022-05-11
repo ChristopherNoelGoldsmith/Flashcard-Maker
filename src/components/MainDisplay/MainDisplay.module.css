@@ -1,0 +1,6 @@
+.no-vis {
+  display: none;
+  width: 0%;
+  opacity: 0;
+  transition: all 1s ease;
+}
