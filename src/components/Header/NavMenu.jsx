@@ -16,18 +16,18 @@ const NavMenu = (props) => {
     changeActiveWindow("MainForm", "Flashcard");
   };
   return (
-    <nav className="row justify-content-end">
-      <div className="col-2 col-lg-5"></div>
+    <nav className=" row gx-3 justify-content-end">
       <Button
-        label="Create Flashcards"
-        className="col-5 col-lg-4 mx-1 my-1 my-lg-2"
+        label="CREATE"
+        className="col-6 col-lg-2 my-1 my-lg-2"
         onClick={() => {
           props.changeWindow("MainForm");
+          if (isVisable) toggleSavedCards();
         }}
       />
       <Button
         onClick={toggleSavedCards}
-        className="col-5 col-lg-2 mx-1 my-1 my-lg-2"
+        className="col-6 col-lg-2 my-1 my-lg-2"
         label="FLASHCARDS"
       />
 

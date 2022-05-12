@@ -5,6 +5,7 @@ const TextArea = (props) => {
         {props.label}
       </label>
       <textarea {...props}></textarea>
+      {props.children}
     </figure>
   );
 };

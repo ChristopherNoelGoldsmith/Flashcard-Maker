@@ -38,7 +38,7 @@ const FlashcardList = (props) => {
     ]);
     setListState(updatedList);
     props.changeWindow("MainForm");
-    props.setSavedCardsVisability();
+    //props.setSavedCardsVisability();
   };
 
   const loadFlashCardHandler = (event) => {
