@@ -2,7 +2,9 @@ import styles from "./Card.module.css";
 
 const Card = (props) => {
   return (
-    <div className={`row gy-5 gx-5 ${props.className} ${styles["util-card"]}`}>
+    <div
+      className={`row gx-1 gy-1 gy-md-5 gx-md-5 justify-content-center ${props.className} ${styles["util-card"]}`}
+    >
       {props.children}
     </div>
   );

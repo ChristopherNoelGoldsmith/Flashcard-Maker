@@ -23,12 +23,10 @@ const parseFormDataReducer = (state, action) => {
     key: Math.floor(Math.random() * 10000),
   };
 };
-
 const checkValidityReducer = (state, action) => {
   if (action.type === "TITLE") state.title = action.title;
   if (action.type === "QUESTION") state.question = action.question;
   if (action.type === "ANSWER") state.answer = action.answer;
-  console.log(state);
   return {
     title: state.title,
     question: state.question,
@@ -68,15 +66,14 @@ const MainForm = () => {
   };
 
   const questionChangeHanlder = (event) => {
-    if (event.target.value.length > 200)
+    if (event.target.value.length > 500)
       return dispatchValidity({ type: "QUESTION", question: true });
     dispatchCardState({ type: "QUESTION", question: event.target.value });
     dispatchValidity({ type: "QUESTION", question: false });
   };
 
   const answerChangeHanlder = (event) => {
-    console.log(event.target.value.length > 200);
-    if (event.target.value.length > 200)
+    if (event.target.value.length > 500)
       return dispatchValidity({ type: "ANSWER", answer: true });
     dispatchCardState({ type: "ANSWER", answer: event.target.value });
     dispatchValidity({ type: "ANSWER", answer: false });
@@ -87,7 +84,7 @@ const MainForm = () => {
     <Card>
       <form
         onSubmit={formDataHandler}
-        className="container row my-5 mx-2"
+        className="container justify-content-center row my-5 mx-2"
         action=""
       >
         <h2 className="my-3">

@@ -19,6 +19,7 @@
 .flashcard .text-container p {
   box-sizing: border-box;
   height: fit-content;
+  word-wrap: break-word;
 }
 
 .flashcard .text-container p:hover {
@@ -28,8 +29,18 @@
 
 .flashcard .front {
   border-radius: 10px;
+  border-bottom: indigo 1px dotted;
 }
 
 .flashcard .back {
   border-radius: 10px;
+  border-bottom: crimson 1px dotted;
+}
+
+@media (max-width: 768px) {
+  .flashcard {
+    border-radius: 10px;
+    font-size: 0.7rem;
+    width: 95vw;
+  }
 }
