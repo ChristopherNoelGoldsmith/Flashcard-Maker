@@ -8,21 +8,28 @@
   font-size: 1.5rem;
 }
 
-.flashcard:hover {
+.flashcard .text-container {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+}
+
+.flashcard .text-container p {
+  box-sizing: border-box;
+  height: fit-content;
+}
+
+.flashcard .text-container p:hover {
   cursor: pointer;
   opacity: 0.7;
 }
 
-.flashcard p {
-  border-bottom: 2px solid white;
-  height: 80%;
-}
-
 .flashcard .front {
-  border: 1px solid indianred;
+  border-radius: 10px;
 }
 
 .flashcard .back {
-  border: 1px solid skyblue;
   border-radius: 10px;
 }

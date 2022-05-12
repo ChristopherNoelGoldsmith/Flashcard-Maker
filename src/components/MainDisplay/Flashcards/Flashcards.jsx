@@ -9,7 +9,7 @@ const flashCardListHandler = (props) => {
     props;
   //creates an array of the flashcards available in the selected local storage key
   const loadedCardList = loadFlashcardList(event);
-  const flashCardList = loadedCardList.map((flashcard) => {
+  const flashCardList = loadedCardList.map((flashcard, cardIndex) => {
     const { question, answer, title, key } = flashcard;
 
     const changeFlashCard = (inc) => {
@@ -23,28 +23,34 @@ const flashCardListHandler = (props) => {
     return (
       <Fragment key={key}>
         <div className={`${styles.flashcard}`}>
-          <h2 className="my-3">{title}</h2>
-          {!flipState && (
-            <p className={`${styles.front}`} onClick={flipEvent}>
-              {question}
-            </p>
-          )}
-          {flipState && (
-            <p className={`${styles.back}`} onClick={flipEvent}>
-              {answer}
-            </p>
-          )}
+          <h2 className="text-uppercase my-3">{`${title} - ${
+            !flipState
+              ? `QUESTION: ${cardIndex + 1}`
+              : `ANSWER: ${cardIndex + 1}`
+          }`}</h2>
+          <div id="text-container" className={`${styles["text-container"]}`}>
+            {!flipState && (
+              <p className={`${styles.front}`} onClick={flipEvent}>
+                {question}
+              </p>
+            )}
+            {flipState && (
+              <p className={`${styles.back}`} onClick={flipEvent}>
+                {answer}
+              </p>
+            )}
+          </div>
         </div>
         <div className="row justify-content-around">
           <Button
             onClick={() => changeFlashCard(-1)}
-            className="col-5 mx-1"
+            className="col-5 p-1 mx-1"
             label="Back"
           />
           <Button
             onClick={() => changeFlashCard(1)}
-            className="col-5 mx-1"
-            label="Forward"
+            className="col-5 p-1 mx-1"
+            label="Next"
           />
         </div>
       </Fragment>
