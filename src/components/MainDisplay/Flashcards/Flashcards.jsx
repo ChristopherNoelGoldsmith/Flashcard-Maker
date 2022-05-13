@@ -13,7 +13,6 @@ const flashCardListHandler = (props) => {
     const { question, answer, title, key } = flashcard;
 
     const changeFlashCard = (inc) => {
-      console.log(flashcardIncriment, loadedCardList.length);
       if (flashcardIncriment <= 0 && inc === -1) return;
       if (flashcardIncriment === loadedCardList.length - 1 && inc === 1) return;
       if (flipState) flipEvent();
@@ -28,17 +27,13 @@ const flashCardListHandler = (props) => {
               ? `QUESTION: ${cardIndex + 1}`
               : `ANSWER: ${cardIndex + 1}`
           }`}</h2>
-          <div id="text-container" className={`${styles["text-container"]}`}>
-            {!flipState && (
-              <p className={`${styles.front}`} onClick={flipEvent}>
-                {question}
-              </p>
-            )}
-            {flipState && (
-              <p className={`${styles.back}`} onClick={flipEvent}>
-                {answer}
-              </p>
-            )}
+          <div
+            id="text-container"
+            onClick={flipEvent}
+            className={`${styles["text-container"]}`}
+          >
+            {!flipState && <p className={`${styles.front}`}>{question}</p>}
+            {flipState && <p className={`${styles.back}`}>{answer}</p>}
           </div>
         </div>
         <div className="row justify-content-around">

@@ -22,19 +22,18 @@
   word-wrap: break-word;
 }
 
-.flashcard .text-container p:hover {
+.flashcard .text-container:hover {
+  color: cyan;
   cursor: pointer;
   opacity: 0.7;
 }
 
-.flashcard .front {
+.flashcard .text-container .front {
   border-radius: 10px;
-  border-bottom: indigo 1px dotted;
 }
 
-.flashcard .back {
+.flashcard .text-container .back {
   border-radius: 10px;
-  border-bottom: crimson 1px dotted;
 }
 
 @media (max-width: 768px) {

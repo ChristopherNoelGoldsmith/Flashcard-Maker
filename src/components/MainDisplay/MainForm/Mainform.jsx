@@ -2,8 +2,9 @@ import styles from "./MainForm.module.css";
 import Card from "../../UI/Card";
 import Input from "../../UI/Input";
 import TextArea from "../../UI/TextArea";
+import AlertMessage from "../../UI/AlertMessage";
 import Button from "../../UI/Button";
-import { useEffect, useReducer } from "react";
+import { useReducer } from "react";
 import {
   localStorageSet,
   loadFlashcardList,
@@ -38,6 +39,12 @@ const MainForm = () => {
   const [cardState, dispatchCardState] = useReducer(parseFormDataReducer, {});
   const [isValidState, dispatchValidity] = useReducer(checkValidityReducer, {});
 
+  const maximum = {
+    title: 10,
+    answer: 500,
+    question: 500,
+  };
+
   //to check if the inputs are valid;
   /*useEffect(() => {
     const identifier = setTimeout(() => {}, 500);
@@ -51,7 +58,7 @@ const MainForm = () => {
     event.preventDefault();
     if (!loadedCardList && localStorage.length >= 10)
       return alert(
-        "You cannot add any new flashcard sets before deleteing some. (MAX: 10)"
+        `You cannot add any new flashcard sets before deleteing some. (MAX: ${maximum.title})`
       );
     localStorageSet(cardState);
     dispatchCardState({ type: "CLEAR" });
@@ -59,21 +66,21 @@ const MainForm = () => {
 
   //Hanlders for the titular elements of the form
   const titleChangeHanlder = (event) => {
-    if (event.target.value.length > 15)
+    if (event.target.value.length > maximum.title)
       return dispatchValidity({ type: "TITLE", title: true });
     dispatchCardState({ type: "TITLE", title: event.target.value });
     dispatchValidity({ type: "TITLE", title: false });
   };
 
   const questionChangeHanlder = (event) => {
-    if (event.target.value.length > 500)
+    if (event.target.value.length > maximum.question)
       return dispatchValidity({ type: "QUESTION", question: true });
     dispatchCardState({ type: "QUESTION", question: event.target.value });
     dispatchValidity({ type: "QUESTION", question: false });
   };
 
   const answerChangeHanlder = (event) => {
-    if (event.target.value.length > 500)
+    if (event.target.value.length > maximum.answer)
       return dispatchValidity({ type: "ANSWER", answer: true });
     dispatchCardState({ type: "ANSWER", answer: event.target.value });
     dispatchValidity({ type: "ANSWER", answer: false });
@@ -88,13 +95,17 @@ const MainForm = () => {
         action=""
       >
         <h2 className="my-3">
-          Construct Your Flashcards -
+          Construct Your Flashcards
           {loadedCardList && (
             <span className={`${styles["card-count"]}`}>
               - Cards: {loadedCardList.length}
             </span>
           )}
         </h2>
+        <AlertMessage
+          classToggle={`${isValidState.title ? "vis" : ""}`}
+          note={`Maximum Characters: ${maximum.title}`}
+        />
         <Input
           label={`Flashcard Set Name:`}
           type="text"
@@ -103,6 +114,10 @@ const MainForm = () => {
           value={cardState.title || ""}
           required
         ></Input>
+        <AlertMessage
+          classToggle={`${isValidState.question ? "vis" : ""}`}
+          note={`Maximum Characters: ${maximum.question}`}
+        />
         <TextArea
           onChange={questionChangeHanlder}
           label="Card Front (QUESTION)"
@@ -110,6 +125,10 @@ const MainForm = () => {
           value={cardState.question || ""}
           required
         ></TextArea>
+        <AlertMessage
+          classToggle={`${isValidState.answer ? "vis" : ""}`}
+          note={`Maximum Characters: ${maximum.answer}`}
+        />
         <TextArea
           onChange={answerChangeHanlder}
           label="Card Back (ANSWER)"

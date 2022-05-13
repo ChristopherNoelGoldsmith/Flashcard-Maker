@@ -1,3 +1,12 @@
+@keyframes popup {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
 .comment {
   display: none;
   position: absolute;
@@ -5,7 +14,14 @@
   color: #333;
   max-width: 30vw;
   background: rgba(255, 255, 255, 0.75);
+  font-weight: 500;
   border-radius: 10px;
-  transform: scale(0);
+  padding: 0.2rem;
   transition: all 1s ease;
+}
+
+.comment.vis {
+  animation: popup 0.15s linear;
+  transition: all 1s ease;
+  display: block;
 }
