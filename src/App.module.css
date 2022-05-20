@@ -5,10 +5,12 @@
 }
 
 body {
+  overflow-x: hidden;
   width: 100vw;
   color: ivory;
   background: url("./img/background.jpg");
 }
+
 body::after {
   content: "";
   top: 0;
@@ -19,6 +21,7 @@ body::after {
   height: 100vh;
   z-index: -1;
 }
+
 .box {
   height: 100px;
   width: 100px;

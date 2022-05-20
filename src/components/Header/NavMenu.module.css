@@ -1,13 +1,19 @@
 nav {
   position: fixed;
   top: 0;
-  left: 12px;
-  background: black;
+  background: transparent;
   height: 5vh;
   width: 100vw;
   z-index: 100;
 }
 
+nav figure {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+
+}
+
 nav button {
-  z-index: 10000;
+  z-index: 100;
 }

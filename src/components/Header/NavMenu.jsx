@@ -17,7 +17,7 @@ const NavMenu = (props) => {
   };
   return (
     <nav className=" row gx-3 justify-content-end">
-      <Button
+      <figure><Button
         label="CREATE"
         className="col-6 col-lg-2 my-1 my-lg-2"
         onClick={() => {
@@ -29,7 +29,7 @@ const NavMenu = (props) => {
         onClick={toggleSavedCards}
         className="col-6 col-lg-2 my-1 my-lg-2"
         label="FLASHCARDS"
-      />
+      /></figure>
 
       {isVisable && (
         <FlashcardList
