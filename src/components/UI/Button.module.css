@@ -2,10 +2,10 @@ button {
   background: whitesmoke;
   border: none;
   padding: 3px 0;
-  margin: 0.2rem 0;
   font-size: 1rem;
   font-weight: 500;
   border-radius: 15px;
+  max-width: 10rem;
 }
 
 button:hover {

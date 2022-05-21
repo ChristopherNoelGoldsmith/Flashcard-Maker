@@ -2,12 +2,21 @@ import Card from "../../UI/Card";
 import styles from "./Flashcards.module.css";
 import Button from "../../UI/Button";
 import React, { useState, Fragment, useEffect } from "react";
-import { loadFlashcardList } from "../../../util/localStorageUtil";
+import { loadFlashcardList, manageServerData } from "../../../util/localStorageUtil";
 
 const flashCardListHandler = (props) => {
   const [event, flipState, flipEvent, incrimentFlashcard, flashcardIncriment] =
     props;
   //creates an array of the flashcards available in the selected local storage key
+  const loadData = async () => {
+    const loadedFromServerFlashcardList = await manageServerData({type: 'GET'});
+    const filtered = loadedFromServerFlashcardList.filter(card => {
+      if(card.title !== event) return false;
+      return true;
+    });
+    console.log(filtered);
+  }
+  loadData();
   const loadedCardList = loadFlashcardList(event);
   const flashCardList = loadedCardList.map((flashcard, cardIndex) => {
     const { question, answer, title, key } = flashcard;

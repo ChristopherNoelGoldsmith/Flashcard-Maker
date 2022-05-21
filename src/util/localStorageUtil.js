@@ -27,9 +27,43 @@ export const localStorageSet = (item) => {
   if (!localStorage.getItem(item.title))
     return localStorage.setItem(item.title, JSON.stringify([item]));
   const json = localStorage.getItem(item.title);
-  console.log(json);
   const savedFlashcards = JSON.parse(json);
   console.log(savedFlashcards);
   const newSave = [item, ...savedFlashcards];
   return localStorage.setItem(item.title, JSON.stringify(newSave));
+};
+
+export const manageServerData = async (params) => {
+  try {
+
+    if (params.type === 'POST') {
+      const writeData = JSON.stringify(params.data);
+
+      await fetch(`https://make-some-flashcards-default-rtdb.firebaseio.com/flashcards.json`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: writeData
+      })
+    }
+    if (params.type === 'GET') {
+      const response = await fetch(`https://make-some-flashcards-default-rtdb.firebaseio.com/flashcards.json`);
+      const json = await response.json();
+      const data = [];
+      //pulls the data from the json into a workable format from the app.
+      for (const cardData in json) {
+        data.push(
+          json[cardData]
+        );
+      }
+      console.log(data)
+      return data;
+    }
+
+
+  }
+  catch (err) {
+    console.log(err);
+  };
 };

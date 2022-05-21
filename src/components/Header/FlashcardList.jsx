@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import {
   loadFlashcardList,
   getLocalStorageKeys,
+  manageServerData,
 } from "../../util/localStorageUtil";
 
 //!!!!!!!!!!!!!!!!!!!!THIS WORKS BUT IS FUCKING JANK
@@ -11,6 +12,7 @@ import {
 
 const getSavedFlashcards = (eventsToAdd) => {
   let navList = getLocalStorageKeys();
+  console.log(manageServerData({type:'GET'}));
   const [deleteFlashcardHandler, loadFlashCardHandler] = eventsToAdd;
   //This final section creates the JSX element that will be inserted into the dom
   navList = navList.map((savedListItemName) => {
@@ -18,7 +20,7 @@ const getSavedFlashcards = (eventsToAdd) => {
     return (
       <FlashcardListItem
         loadCard={loadFlashCardHandler}
-        //cardCount={cardCount}
+        //cardCount={cardCount} ADD THIS
         deleteCard={deleteFlashcardHandler}
         key={`${Math.random() * 1000}${savedListItemName[0]}`}
       >
