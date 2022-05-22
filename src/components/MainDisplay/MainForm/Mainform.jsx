@@ -9,6 +9,7 @@ import {
   localStorageSet,
   loadFlashcardList,
   manageServerData,
+  manageLocalStorage,
 } from '../../../util/localStorageUtil';
 
 //Function that passes through the useReducer hook to handle the input form render in the dom
@@ -42,7 +43,7 @@ const MainForm = () => {
   const [isValidState, dispatchValidity] = useReducer(checkValidityReducer, {});
 
   const maximum = {
-    title: 10,
+    title: 15,
     answer: 500,
     question: 500,
   };
@@ -56,7 +57,28 @@ const MainForm = () => {
     };
   }, [isValidState]);
 */
-  const formDataHandler = (event) => {
+
+  const formCRUD = async () => {
+    manageLocalStorage({ type: 'POST', data: cardState });
+    //localStorageSet(cardState);
+    console.log(cardState.title);
+    const [saveForServer] = manageLocalStorage({
+      type: 'GET',
+      target: cardState.title,
+    });
+    console.log(saveForServer);
+    const deckExists = await manageServerData({ type: 'GET' });
+    //checks the server to see if any flashcards of the same title exist.
+    if (deckExists.map((el) => el.title === cardState.title).length > 0) {
+      console.log(deckExists.keys());
+      manageServerData({ type: 'PATCH', data: saveForServer });
+      return dispatchCardState({ type: 'CLEAR' });
+    }
+    manageServerData({ type: 'POST', data: saveForServer });
+    dispatchCardState({ type: 'CLEAR' });
+  };
+
+  const formDataHandler = async (event) => {
     event.preventDefault();
     if (!loadedCardList && localStorage.length >= 10)
       return alert(
@@ -64,24 +86,7 @@ const MainForm = () => {
       );
     console.log(cardState);
 
-    //workoaround do to an [object Object] error.  FIX!!!!
-    const convertToCleanData = () => {
-      const { title, key, question, answer } = cardState;
-      return {
-        title,
-        key,
-        cards: [
-          {
-            question,
-            answer,
-          },
-        ],
-      };
-    };
-
-    localStorageSet(cardState);
-    manageServerData({ type: 'POST', data: convertToCleanData() });
-    dispatchCardState({ type: 'CLEAR' });
+    await formCRUD();
   };
 
   //Hanlders for the titular elements of the form
