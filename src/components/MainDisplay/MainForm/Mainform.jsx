@@ -61,19 +61,22 @@ const MainForm = () => {
   const formCRUD = async () => {
     manageLocalStorage({ type: 'POST', data: cardState });
     //localStorageSet(cardState);
-    console.log(cardState.title);
+    console.log(cardState);
+
     const [saveForServer] = manageLocalStorage({
       type: 'GET',
       target: cardState.title,
     });
-    console.log(saveForServer);
-    const deckExists = await manageServerData({ type: 'GET' });
+    const deckExists = await manageServerData({
+      type: 'GETALL',
+    });
+    console.log(deckExists);
     //checks the server to see if any flashcards of the same title exist.
-    if (deckExists.map((el) => el.title === cardState.title).length > 0) {
-      console.log(deckExists.keys());
+    if (deckExists) {
       manageServerData({ type: 'PATCH', data: saveForServer });
       return dispatchCardState({ type: 'CLEAR' });
     }
+    console.log(saveForServer);
     manageServerData({ type: 'POST', data: saveForServer });
     dispatchCardState({ type: 'CLEAR' });
   };

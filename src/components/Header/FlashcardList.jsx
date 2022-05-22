@@ -1,18 +1,18 @@
-import FlashcardListItem from "./FlashcardListItem";
-import styles from "./FlashcardList.module.css";
-import React, { useState } from "react";
+import FlashcardListItem from './FlashcardListItem';
+import styles from './FlashcardList.module.css';
+import React, { useState } from 'react';
 import {
   loadFlashcardList,
   getLocalStorageKeys,
   manageServerData,
-} from "../../util/localStorageUtil";
+} from '../../util/localStorageUtil';
 
 //!!!!!!!!!!!!!!!!!!!!THIS WORKS BUT IS FUCKING JANK
 //REFACTOR CODE SO THE JSX IS NOT CALLED EVERY TIME THERE IS A STATE CHANGE AND MAKE IT MORE READABLE!!!!!!!!
 
 const getSavedFlashcards = (eventsToAdd) => {
   let navList = getLocalStorageKeys();
-  console.log(manageServerData({type:'GET'}));
+
   const [deleteFlashcardHandler, loadFlashCardHandler] = eventsToAdd;
   //This final section creates the JSX element that will be inserted into the dom
   navList = navList.map((savedListItemName) => {
@@ -44,14 +44,14 @@ const FlashcardList = (props) => {
       loadFlashCardHandler,
     ]);
     setListState(updatedList);
-    props.changeWindow("MainForm");
+    props.changeWindow('MainForm');
     //props.setSavedCardsVisability();
   };
 
   const loadFlashCardHandler = (event) => {
     //Uses the name locaed in the label of the flashcardlistitem to inject into the changeWindow state.
     console.log(event.target.innerText);
-    props.changeWindow("Flashcard");
+    props.changeWindow('Flashcard');
     props.chosenFlashCard(event.target.innerText);
     props.setSavedCardsVisability();
   };

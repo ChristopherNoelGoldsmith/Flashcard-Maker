@@ -1,7 +1,11 @@
-import styles from "./NavMenu.module.css";
-import FlashcardList from "./FlashcardList";
-import Button from "../UI/Button";
-import React, { useState } from "react";
+import styles from './NavMenu.module.css';
+import FlashcardList from './FlashcardList';
+import Button from '../UI/Button';
+import React, { useState } from 'react';
+import {
+  manageLocalStorage,
+  manageServerData,
+} from '../../util/localStorageUtil';
 
 const NavMenu = (props) => {
   const [isVisable, setSavedCardsVisability] = useState(false);
@@ -11,25 +15,45 @@ const NavMenu = (props) => {
     props.changeWindow(target);
   };
 
-  const toggleSavedCards = () => {
+  //creates an array of the flashcards available in the selected local storage key
+  const loadData = async () => {
+    const loadedFromServerFlashcardList = await manageServerData({
+      type: 'GETALL',
+    });
+
+    if (!loadedFromServerFlashcardList.length) return;
+
+    return loadedFromServerFlashcardList.forEach((loadedData, index) => {
+      const { flashcards } = loadedData;
+      return manageLocalStorage({
+        type: 'POST',
+        data: flashcards.cards,
+      });
+    });
+  };
+
+  const toggleSavedCards = async () => {
+    if (!isVisable) await loadData();
     setSavedCardsVisability((visability) => !visability);
-    changeActiveWindow("MainForm", "Flashcard");
+    changeActiveWindow('MainForm', 'Flashcard');
   };
   return (
     <nav className=" row gx-3 justify-content-end">
-      <figure><Button
-        label="CREATE"
-        className="col-6 col-lg-2 my-1 my-lg-2"
-        onClick={() => {
-          props.changeWindow("MainForm");
-          if (isVisable) toggleSavedCards();
-        }}
-      />
-      <Button
-        onClick={toggleSavedCards}
-        className="col-6 col-lg-2 my-1 my-lg-2"
-        label="FLASHCARDS"
-      /></figure>
+      <figure>
+        <Button
+          label="CREATE"
+          className="col-6 col-lg-2 my-1 my-lg-2"
+          onClick={() => {
+            props.changeWindow('MainForm');
+            if (isVisable) toggleSavedCards();
+          }}
+        />
+        <Button
+          onClick={toggleSavedCards}
+          className="col-6 col-lg-2 my-1 my-lg-2"
+          label="FLASHCARDS"
+        />
+      </figure>
 
       {isVisable && (
         <FlashcardList
