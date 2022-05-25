@@ -6,7 +6,6 @@ import AlertMessage from '../../UI/AlertMessage';
 import Button from '../../UI/Button';
 import { useReducer } from 'react';
 import {
-  localStorageSet,
   loadFlashcardList,
   manageServerData,
   manageLocalStorage,
@@ -48,20 +47,9 @@ const MainForm = () => {
     question: 500,
   };
 
-  //to check if the inputs are valid;
-  /*useEffect(() => {
-    const identifier = setTimeout(() => {}, 500);
-
-    return () => {
-      clearTimeout(identifier);
-    };
-  }, [isValidState]);
-*/
-
   const formCRUD = async () => {
     manageLocalStorage({ type: 'POST', data: cardState });
     //localStorageSet(cardState);
-    console.log(cardState);
 
     const [saveForServer] = manageLocalStorage({
       type: 'GET',
@@ -70,13 +58,11 @@ const MainForm = () => {
     const deckExists = await manageServerData({
       type: 'GETALL',
     });
-    console.log(deckExists);
     //checks the server to see if any flashcards of the same title exist.
     if (deckExists) {
       manageServerData({ type: 'PATCH', data: saveForServer });
       return dispatchCardState({ type: 'CLEAR' });
     }
-    console.log(saveForServer);
     manageServerData({ type: 'POST', data: saveForServer });
     dispatchCardState({ type: 'CLEAR' });
   };

@@ -56,7 +56,6 @@ export const manageLocalStorage = (params) => {
 
   const { data } = params;
 
-
   if (params.type === 'GET') {
     //Obtains the flashcard list form lovalstorage through a string,
     //destructures the data then returns it.
@@ -67,49 +66,31 @@ export const manageLocalStorage = (params) => {
   }
 
   //FOR WRITING DATA IN LOCALSTORAGE
+  if (params.type === 'PATCH') {
+    console.log(data);
+
+    //if the the post is not in local storage the below function handles it and adds it
+    if (!localStorage.getItem(data.title)) {
+
+      return localStorage.setItem(data.title, JSON.stringify([data]));
+    }
+
+    return localStorage.setItem(data.title, JSON.stringify([data]));
+  };
+
   if (params.type === 'POST') {
     const formatedData = convertToCleanData(data);
     const cards = formatedData;
 
+    //if the the post is not in local storage the below function handles it and adds it
     if (!localStorage.getItem(data.title)) {
 
       return localStorage.setItem(data.title, JSON.stringify([cards]));
     }
     const json = localStorage.getItem(data.title);
     const savedFlashcards = JSON.parse(json);
-    //Extracts the flashcard object from the users localstorage.
-    const selectedFlashcard = savedFlashcards.filter(flashcardData => {
-      if (flashcardData.title !== data.title) {
-        return false;
-      }
-      return true;
-    });
 
-
-    //extracts all non-selected flashcards from the users localStorage for the purpose of creating a save file.
-    const notSelectedFlashCards = savedFlashcards.filter(flashcardData => {
-      if (flashcardData.title !== data) {
-        return true;
-      }
-      return false;
-    });
-
-    //De-nests the data after it is iterated.
-    const [oldData] = formatedData.cards;
-    const [newData] = selectedFlashcard;
-
-    //The format of the saved flashcard object
-    const newFlashcards = {
-      title: data.title,
-      cards: [oldData, ...newData.cards],
-      key: data.key
-    };
-
-    //USES CARD DATA TITLE AS THE KEY FOR LOCAL STORAGE WHEN SAVING.
-    //CAN CHANGE TO USERNAME IN FUTRE!!!!
-    const newSave = [newFlashcards, ...notSelectedFlashCards];
-
-    return localStorage.setItem(data.title, JSON.stringify(newSave));
+    return localStorage.setItem(data.title, JSON.stringify(savedFlashcards));
   };
 
 }
@@ -165,6 +146,7 @@ export const manageServerData = async (params) => {
       const data = [];
       //pulls the data from the json into a workable format from the app.
       for (const cardData in json) {
+        console.log(cardData);
         data.push(
           json[cardData]
         );

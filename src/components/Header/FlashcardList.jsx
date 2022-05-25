@@ -45,12 +45,10 @@ const FlashcardList = (props) => {
     ]);
     setListState(updatedList);
     props.changeWindow('MainForm');
-    //props.setSavedCardsVisability();
   };
 
   const loadFlashCardHandler = (event) => {
     //Uses the name locaed in the label of the flashcardlistitem to inject into the changeWindow state.
-    console.log(event.target.innerText);
     props.changeWindow('Flashcard');
     props.chosenFlashCard(event.target.innerText);
     props.setSavedCardsVisability();

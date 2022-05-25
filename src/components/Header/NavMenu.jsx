@@ -23,11 +23,13 @@ const NavMenu = (props) => {
 
     if (!loadedFromServerFlashcardList.length) return;
 
+    console.log(loadedFromServerFlashcardList);
     return loadedFromServerFlashcardList.forEach((loadedData, index) => {
       const { flashcards } = loadedData;
+      ////!!!!!!!!!!
       return manageLocalStorage({
-        type: 'POST',
-        data: flashcards.cards,
+        type: 'PATCH',
+        data: flashcards,
       });
     });
   };
@@ -51,7 +53,7 @@ const NavMenu = (props) => {
         <Button
           onClick={toggleSavedCards}
           className="col-6 col-lg-2 my-1 my-lg-2"
-          label="FLASHCARDS"
+          label={!isVisable ? `FLASHCARDS` : `CLOSE`}
         />
       </figure>
 
