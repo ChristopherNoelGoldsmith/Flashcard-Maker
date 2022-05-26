@@ -1,11 +1,9 @@
-import styles from './NavMenu.module.css';
-import FlashcardList from './FlashcardList';
-import Button from '../UI/Button';
-import React, { useState } from 'react';
-import {
-  manageLocalStorage,
-  manageServerData,
-} from '../../util/localStorageUtil';
+import styles from "./NavMenu.module.css";
+import FlashcardList from "./FlashcardList";
+import Button from "../UI/Button";
+import React, { useState } from "react";
+import { manageLocalStorage } from "../../util/localStorageUtil";
+import { manageServerData } from "../../util/serverStorage";
 
 const NavMenu = (props) => {
   const [isVisable, setSavedCardsVisability] = useState(false);
@@ -18,7 +16,7 @@ const NavMenu = (props) => {
   //creates an array of the flashcards available in the selected local storage key
   const loadData = async () => {
     const loadedFromServerFlashcardList = await manageServerData({
-      type: 'GETALL',
+      type: "GETALL",
     });
 
     if (!loadedFromServerFlashcardList.length) return;
@@ -26,9 +24,9 @@ const NavMenu = (props) => {
     console.log(loadedFromServerFlashcardList);
     return loadedFromServerFlashcardList.forEach((loadedData, index) => {
       const { flashcards } = loadedData;
-      ////!!!!!!!!!!
+
       return manageLocalStorage({
-        type: 'PATCH',
+        type: "PATCH",
         data: flashcards,
       });
     });
@@ -37,7 +35,7 @@ const NavMenu = (props) => {
   const toggleSavedCards = async () => {
     if (!isVisable) await loadData();
     setSavedCardsVisability((visability) => !visability);
-    changeActiveWindow('MainForm', 'Flashcard');
+    changeActiveWindow("MainForm", "Flashcard");
   };
   return (
     <nav className=" row gx-3 justify-content-end">
@@ -46,7 +44,7 @@ const NavMenu = (props) => {
           label="CREATE"
           className="col-6 col-lg-2 my-1 my-lg-2"
           onClick={() => {
-            props.changeWindow('MainForm');
+            props.changeWindow("MainForm");
             if (isVisable) toggleSavedCards();
           }}
         />

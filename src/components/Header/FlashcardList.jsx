@@ -1,11 +1,8 @@
-import FlashcardListItem from './FlashcardListItem';
-import styles from './FlashcardList.module.css';
-import React, { useState } from 'react';
-import {
-  loadFlashcardList,
-  getLocalStorageKeys,
-  manageServerData,
-} from '../../util/localStorageUtil';
+import FlashcardListItem from "./FlashcardListItem";
+import styles from "./FlashcardList.module.css";
+import React, { useState } from "react";
+import { getLocalStorageKeys } from "../../util/localStorageUtil";
+import { manageServerData } from "../../util/serverStorage";
 
 //!!!!!!!!!!!!!!!!!!!!THIS WORKS BUT IS FUCKING JANK
 //REFACTOR CODE SO THE JSX IS NOT CALLED EVERY TIME THERE IS A STATE CHANGE AND MAKE IT MORE READABLE!!!!!!!!
@@ -38,18 +35,18 @@ const FlashcardList = (props) => {
   const deleteFlashcardHandler = (event) => {
     const itemToDelete = event.target.parentNode.firstChild.innerText;
     localStorage.removeItem(itemToDelete);
-
+    manageServerData({ type: "DELETE", title: itemToDelete });
     const updatedList = getSavedFlashcards([
       deleteFlashcardHandler,
       loadFlashCardHandler,
     ]);
     setListState(updatedList);
-    props.changeWindow('MainForm');
+    props.changeWindow("MainForm");
   };
 
   const loadFlashCardHandler = (event) => {
     //Uses the name locaed in the label of the flashcardlistitem to inject into the changeWindow state.
-    props.changeWindow('Flashcard');
+    props.changeWindow("Flashcard");
     props.chosenFlashCard(event.target.innerText);
     props.setSavedCardsVisability();
   };
