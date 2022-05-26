@@ -3,12 +3,11 @@ import Card from "../UI/Card";
 import Input from "../UI/Input";
 import Button from "../UI/Button";
 import AlertMessage from "../UI/AlertMessage";
-import { useReducer } from "react";
+import { useReducer, useState } from "react";
 import {
   manageServerUsers,
   checkIfUserInServer,
 } from "../../util/serverStorage";
-import store from "../../store";
 import { authActions } from "../../store/authentication";
 import { useSelector, useDispatch } from "react-redux";
 
@@ -23,8 +22,13 @@ const inputReducer = (state, action) => {
 
 const Login = (params) => {
   const [inputState, dispatchInput] = useReducer(inputReducer, {});
+  const [usernameIsValid, setUsernameIsValid] = useState({ status: true });
+  const [passwordIsValid, setPasswordIsValid] = useState({ status: true });
+
+  //Redux tools
   const loginStatus = useSelector((state) => state.auth);
   const dispatchLoginStatus = useDispatch();
+  //
   const usernameHandler = (event) => {
     if (event.target.value.length > 10) return;
     dispatchInput({ type: "USERNAME", username: event.target.value });
@@ -38,9 +42,10 @@ const Login = (params) => {
   //Handles login attempts that do not match out servers data. invalid usernames/passwords.
   const validation = async () => {
     const userDataIsValid = await checkIfUserInServer({ data: inputState });
-    if (!userDataIsValid) return { status: false, message: "INVALID USERNAME" };
+    if (!userDataIsValid)
+      return setUsernameIsValid({ status: false, message: "INVALID USERNAME" });
     if (userDataIsValid.userData.password !== inputState.password)
-      return { status: false, message: "INVALID PASSWORD" };
+      return setPasswordIsValid({ status: false, message: "INVALID PASSWORD" });
 
     return { status: true };
   };
@@ -65,11 +70,19 @@ const Login = (params) => {
 
   return (
     <Card>
-      <form className={"m-5 gy-3"} onSubmit={loginHandler}>
+      <form className={"m-5 gy-3 justify-self"} onSubmit={loginHandler}>
+        <AlertMessage
+          classToggle={`${!usernameIsValid.status ? "vis" : ""}`}
+          note={usernameIsValid.message}
+        />
         <Input
           onChange={usernameHandler}
           value={inputState.username || ""}
           label={"USERNAME"}
+        />
+        <AlertMessage
+          classToggle={`${!passwordIsValid.status ? "vis" : ""}`}
+          note={passwordIsValid.message}
         />
         <Input
           value={inputState.password || ""}
