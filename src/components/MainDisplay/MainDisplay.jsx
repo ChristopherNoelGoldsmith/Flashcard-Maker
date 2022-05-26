@@ -3,7 +3,6 @@ import MainForm from "./MainForm/Mainform";
 import Flashcards from "./Flashcards/Flashcards";
 import NavMenu from "../Header/NavMenu";
 import React, { useState } from "react";
-import Login from "../Login/Login";
 
 const MainDisplay = (props) => {
   const [activeWindow, setActiveWindow] = useState("MainForm");
@@ -15,7 +14,6 @@ const MainDisplay = (props) => {
 
   return (
     <div className={`row container justify-content-center my-5`}>
-      <Login></Login>
       <NavMenu
         chosenFlashCard={setChosenFlashCardList}
         changeWindow={changeActiveWindowHandler}

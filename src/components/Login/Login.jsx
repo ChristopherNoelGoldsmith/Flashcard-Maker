@@ -4,7 +4,10 @@ import Input from "../UI/Input";
 import Button from "../UI/Button";
 import AlertMessage from "../UI/AlertMessage";
 import { useReducer } from "react";
-import { manageServerUsers } from "../../util/serverStorage";
+import {
+  manageServerUsers,
+  checkIfUserInServer,
+} from "../../util/serverStorage";
 import store from "../../store";
 import { authActions } from "../../store/authentication";
 import { useSelector, useDispatch } from "react-redux";
@@ -22,7 +25,6 @@ const Login = (params) => {
   const [inputState, dispatchInput] = useReducer(inputReducer, {});
   const loginStatus = useSelector((state) => state.auth);
   const dispatchLoginStatus = useDispatch();
-  console.log(loginStatus);
   const usernameHandler = (event) => {
     if (event.target.value.length > 10) return;
     dispatchInput({ type: "USERNAME", username: event.target.value });
@@ -33,10 +35,21 @@ const Login = (params) => {
     dispatchInput({ type: "PASSWORD", password: event.target.value });
   };
 
-  const loginHandler = (event) => {
+  //Handles login attempts that do not match out servers data. invalid usernames/passwords.
+  const validation = async () => {
+    const userDataIsValid = await checkIfUserInServer({ data: inputState });
+    if (!userDataIsValid) return { status: false, message: "INVALID USERNAME" };
+    if (userDataIsValid.userData.password !== inputState.password)
+      return { status: false, message: "INVALID PASSWORD" };
+
+    return { status: true };
+  };
+  const loginHandler = async (event) => {
     event.preventDefault();
-    console.log(inputState);
+    const isValid = await validation();
+    if (!isValid.status) return console.log(isValid.message);
     dispatchLoginStatus(authActions.login({ username: inputState.username }));
+    console.log(loginStatus);
   };
 
   const createAccountHandler = (event) => {
