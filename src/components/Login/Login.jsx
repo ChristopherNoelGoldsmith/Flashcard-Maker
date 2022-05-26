@@ -4,9 +4,12 @@ import Input from "../UI/Input";
 import Button from "../UI/Button";
 import AlertMessage from "../UI/AlertMessage";
 import { useReducer } from "react";
+import { manageServerUsers } from "../../util/serverStorage";
+import store from "../../store";
+import { authActions } from "../../store/authentication";
+import { useSelector, useDispatch } from "react-redux";
 
 const inputReducer = (state, action) => {
-  console.log(state, action);
   if (action.type === "PASSWORD") state.password = action.password;
   if (action.type === "USERNAME") state.username = action.username;
   return {
@@ -17,7 +20,9 @@ const inputReducer = (state, action) => {
 
 const Login = (params) => {
   const [inputState, dispatchInput] = useReducer(inputReducer, {});
-
+  const loginStatus = useSelector((state) => state.auth);
+  const dispatchLoginStatus = useDispatch();
+  console.log(loginStatus);
   const usernameHandler = (event) => {
     if (event.target.value.length > 10) return;
     dispatchInput({ type: "USERNAME", username: event.target.value });
@@ -28,23 +33,39 @@ const Login = (params) => {
     dispatchInput({ type: "PASSWORD", password: event.target.value });
   };
 
-  const loginHandler = () => {};
+  const loginHandler = (event) => {
+    event.preventDefault();
+    console.log(inputState);
+    dispatchLoginStatus(authActions.login({ username: inputState.username }));
+  };
+
+  const createAccountHandler = (event) => {
+    event.preventDefault();
+    manageServerUsers({
+      type: "POST",
+      data: {
+        username: inputState.username,
+        password: inputState.password,
+      },
+    });
+  };
 
   return (
     <Card>
-      <form className={"m-5 gy-3"} action="">
+      <form className={"m-5 gy-3"} onSubmit={loginHandler}>
         <Input
           onChange={usernameHandler}
-          value={inputState.username}
+          value={inputState.username || ""}
           label={"USERNAME"}
         />
         <Input
-          value={inputState.password}
+          value={inputState.password || ""}
           onChange={passwordHandler}
           label={"PASSWORD"}
           type={"password"}
         />
         <Button label={"LOGIN"} />
+        <Button onClick={createAccountHandler} label={"CREATE ACCOUNT"} />
       </form>
     </Card>
   );
