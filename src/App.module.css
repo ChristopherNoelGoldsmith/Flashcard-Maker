@@ -29,8 +29,13 @@ body::after {
 }
 
 .mains {
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 10vh;
+}
+
+section {
+  min-height: 100vh;
 }

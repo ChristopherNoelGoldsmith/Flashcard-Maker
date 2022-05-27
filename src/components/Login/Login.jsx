@@ -82,29 +82,32 @@ const Login = (params) => {
 
   return (
     <Card>
+      <h1 className={"col-12"}>FLASH IT!</h1>
       <form
         className={"container justify-content-center my-5"}
         onSubmit={loginHandler}
       >
-        <AlertMessage
-          classToggle={`${!usernameIsValid.status ? "vis" : ""}`}
-          note={usernameIsValid.message}
-        />
-        <Input
-          onChange={usernameHandler}
-          value={inputState.username || ""}
-          label={"USERNAME"}
-        />
-        <AlertMessage
-          classToggle={`${!passwordIsValid.status ? "vis" : ""}`}
-          note={passwordIsValid.message}
-        />
-        <Input
-          value={inputState.password || ""}
-          onChange={passwordHandler}
-          label={"PASSWORD"}
-          type={"password"}
-        />
+        <figure className="row g-5 mx-5 justify-content-center">
+          <AlertMessage
+            classToggle={`${!usernameIsValid.status ? "vis" : ""}`}
+            note={usernameIsValid.message}
+          />
+          <Input
+            onChange={usernameHandler}
+            value={inputState.username || ""}
+            label={"USERNAME"}
+          />
+          <AlertMessage
+            classToggle={`${!passwordIsValid.status ? "vis" : ""}`}
+            note={passwordIsValid.message}
+          />
+          <Input
+            value={inputState.password || ""}
+            onChange={passwordHandler}
+            label={"PASSWORD"}
+            type={"password"}
+          />
+        </figure>
         <Button label={"LOGIN"} />
         <Button onClick={createAccountHandler} label={"CREATE ACCOUNT"} />
         <Button onClick={guestAccountHandler} label={"GUEST"} />

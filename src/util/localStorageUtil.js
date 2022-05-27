@@ -32,22 +32,6 @@ export const loadFlashcardList = (event) => {
   return flashcard;
 };
 
-// /*Handles setting cards into the local storage.
-// it takes the title printed into the card handler
-// and add the question and answers avialable in the cards
-// to the titled item in local storage.
-// */
-
-// export const localStorageSet = (item) => {
-//   if (!localStorage.getItem(item.title))
-//     return localStorage.setItem(item.title, JSON.stringify([item]));
-//   const json = localStorage.getItem(item.title);
-//   const savedFlashcards = JSON.parse(json);
-//   console.log(savedFlashcards);
-//   const newSave = [item, ...savedFlashcards];
-//   return localStorage.setItem(item.title, JSON.stringify(newSave));
-// };
-
 export const manageLocalStorage = (params) => {
   const { data } = params;
   console.log(params);
@@ -87,12 +71,16 @@ export const manageLocalStorage = (params) => {
     const json = localStorage.getItem(data.title);
     const savedFlashcards = JSON.parse(json);
 
+    console.log(data);
+    console.log(newCards);
+    console.log(savedFlashcards);
+
     return localStorage.setItem(
       data.title,
       JSON.stringify({
-        title: formatedData.title,
+        title: data.title,
         cards: [newCards, ...savedFlashcards.cards],
-        key: formatedData.key,
+        key: data.key,
       })
     );
   }

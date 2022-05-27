@@ -18,7 +18,7 @@ export const manageServerData = async (params) => {
 
     if (params.type === "PATCH") {
       const writeData = JSON.stringify(params.data);
-
+      console.log(writeData);
       await fetch(
         `https://make-some-flashcards-default-rtdb.firebaseio.com/users/${params.username}/cards/${params.data.title}/flashcards.json`,
         {
