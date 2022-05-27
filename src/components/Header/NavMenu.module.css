@@ -1,8 +1,7 @@
 nav {
   position: fixed;
   top: 0;
-  background: transparent;
-  height: 5vh;
+  background: rgba(25, 25, 25, 0.8);
   width: 100vw;
   z-index: 100;
 }
@@ -11,7 +10,6 @@ nav figure {
   display: flex;
   flex-direction: row;
   justify-content: end;
-
 }
 
 nav button {

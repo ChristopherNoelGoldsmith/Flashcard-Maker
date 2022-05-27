@@ -3,9 +3,9 @@ export const manageServerData = async (params) => {
     if (params.type === "POST") {
       //const cleanData = convertToCleanData(params.data);
       const writeData = JSON.stringify(params.data);
-      console.log(params.data);
+
       await fetch(
-        `https://make-some-flashcards-default-rtdb.firebaseio.com/${params.data.user}/cards/${params.data.title}/flashcards.json`,
+        `https://make-some-flashcards-default-rtdb.firebaseio.com/users/${params.username}/cards/${params.data.title}/flashcards.json`,
         {
           method: "POST",
           headers: {
@@ -20,7 +20,7 @@ export const manageServerData = async (params) => {
       const writeData = JSON.stringify(params.data);
 
       await fetch(
-        `https://make-some-flashcards-default-rtdb.firebaseio.com/${params.data.user}/cards/${params.data.title}/flashcards.json`,
+        `https://make-some-flashcards-default-rtdb.firebaseio.com/users/${params.username}/cards/${params.data.title}/flashcards.json`,
         {
           method: "PATCH",
           headers: {
@@ -34,7 +34,7 @@ export const manageServerData = async (params) => {
     if (params.type === "GET") {
       if (!params.data.title) return false;
       const response = await fetch(
-        `https://make-some-flashcards-default-rtdb.firebaseio.com/saved/${params.data.user}/cards/${params.data.title}/flashcards.json`
+        `https://make-some-flashcards-default-rtdb.firebaseio.com/users/${params.username}/cards/${params.data.title}/flashcards.json`
       );
       const json = await response.json();
       const data = [];
@@ -49,7 +49,7 @@ export const manageServerData = async (params) => {
     if (params.type === "GETALL") {
       //turn saved into the username
       const response = await fetch(
-        `https://make-some-flashcards-default-rtdb.firebaseio.com/saved${params.data.user}/cards.json`
+        `https://make-some-flashcards-default-rtdb.firebaseio.com/users/${params.username}/cards.json`
       );
       const json = await response.json();
       const data = [];
@@ -57,7 +57,7 @@ export const manageServerData = async (params) => {
       for (const cardData in json) {
         data.push(json[cardData]);
       }
-      console.log(data);
+
       return data;
     }
 
@@ -65,7 +65,7 @@ export const manageServerData = async (params) => {
     if (params.type === "DELETE") {
       //turn saved into the username
       await fetch(
-        `https://make-some-flashcards-default-rtdb.firebaseio.com/saved/${params.title}.json`,
+        `https://make-some-flashcards-default-rtdb.firebaseio.com/users//${params.username}/cards/${params.title}.json`,
         {
           method: "DELETE",
           headers: {
@@ -74,7 +74,6 @@ export const manageServerData = async (params) => {
           id: 1,
         }
       );
-      console.log("success");
     }
   } catch (err) {
     console.log(err);

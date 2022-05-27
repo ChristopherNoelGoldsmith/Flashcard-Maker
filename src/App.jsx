@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 
 function App() {
   const loginStatus = useSelector((state) => state.auth.isAuthenticated);
-  console.log(loginStatus);
   return (
     <section
       className={`container d-flex justify-content-center align-items-center`}

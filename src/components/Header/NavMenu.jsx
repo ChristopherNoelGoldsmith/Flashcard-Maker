@@ -4,10 +4,16 @@ import Button from "../UI/Button";
 import React, { useState } from "react";
 import { manageLocalStorage } from "../../util/localStorageUtil";
 import { manageServerData } from "../../util/serverStorage";
+import { useSelector, useDispatch } from "react-redux";
+import { authActions } from "../../store/authentication";
 
 const NavMenu = (props) => {
   const [isVisable, setSavedCardsVisability] = useState(false);
 
+  //
+  const dispatch = useDispatch();
+  const loginStatus = useSelector((state) => state.auth);
+  //
   const changeActiveWindow = (target, ignore) => {
     if (props.activeWindow === ignore) return;
     props.changeWindow(target);
@@ -17,6 +23,7 @@ const NavMenu = (props) => {
   const loadData = async () => {
     const loadedFromServerFlashcardList = await manageServerData({
       type: "GETALL",
+      username: loginStatus.username,
     });
 
     if (!loadedFromServerFlashcardList.length) return;
@@ -37,12 +44,16 @@ const NavMenu = (props) => {
     setSavedCardsVisability((visability) => !visability);
     changeActiveWindow("MainForm", "Flashcard");
   };
+
+  const logoutHandler = () => {
+    return dispatch(authActions.logout());
+  };
   return (
-    <nav className=" row gx-3 justify-content-end">
+    <nav className=" row gx-3 justify-content-center">
       <figure>
         <Button
           label="CREATE"
-          className="col-6 col-lg-2 my-1 my-lg-2"
+          className="col-4 col-lg-2 my-1 my-lg-2"
           onClick={() => {
             props.changeWindow("MainForm");
             if (isVisable) toggleSavedCards();
@@ -50,8 +61,13 @@ const NavMenu = (props) => {
         />
         <Button
           onClick={toggleSavedCards}
-          className="col-6 col-lg-2 my-1 my-lg-2"
+          className="col-4 col-lg-2 my-1 my-lg-2"
           label={!isVisable ? `FLASHCARDS` : `CLOSE`}
+        />
+        <Button
+          onClick={logoutHandler}
+          className="col-4 col-lg-2 my-1 my-lg-2"
+          label={"LOGOUT"}
         />
       </figure>
 

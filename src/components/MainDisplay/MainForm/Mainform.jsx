@@ -10,6 +10,7 @@ import {
   manageLocalStorage,
 } from "../../../util/localStorageUtil";
 import { manageServerData } from "../../../util/serverStorage";
+import { useSelector } from "react-redux";
 
 //Function that passes through the useReducer hook to handle the input form render in the dom
 const parseFormDataReducer = (state, action) => {
@@ -41,29 +42,39 @@ const MainForm = () => {
   const [cardState, dispatchCardState] = useReducer(parseFormDataReducer, {});
   const [isValidState, dispatchValidity] = useReducer(checkValidityReducer, {});
 
+  const loginStatus = useSelector((state) => state.auth);
+  //params for max inputs
   const maximum = {
     title: 15,
     answer: 500,
     question: 500,
   };
-
+  //----------------------
   const formCRUD = async () => {
     manageLocalStorage({ type: "POST", data: cardState });
     //localStorageSet(cardState);
 
-    const [saveForServer] = manageLocalStorage({
+    const saveForServer = manageLocalStorage({
       type: "GET",
       target: cardState.title,
     });
-    const deckExists = await manageServerData({
-      type: "GETALL",
+    // const deckExists = await manageServerData({
+    //   type: "GETALL", username: loginStatus.username
+    // });
+    // //checks the server to see if any flashcards of the same title exist.
+    // if (deckExists) {
+    //   manageServerData({
+    //     type: "PATCH",
+    //     data: saveForServer,
+    //     username: loginStatus.username,
+    //   });
+    //   return dispatchCardState({ type: "CLEAR" });
+    // }
+    manageServerData({
+      type: "PATCH",
+      data: saveForServer,
+      username: loginStatus.username,
     });
-    //checks the server to see if any flashcards of the same title exist.
-    if (deckExists) {
-      manageServerData({ type: "PATCH", data: saveForServer });
-      return dispatchCardState({ type: "CLEAR" });
-    }
-    manageServerData({ type: "POST", data: saveForServer });
     dispatchCardState({ type: "CLEAR" });
   };
 

@@ -50,7 +50,7 @@ export const loadFlashcardList = (event) => {
 
 export const manageLocalStorage = (params) => {
   const { data } = params;
-
+  console.log(params);
   //GET--------------------------------
   if (params.type === "GET") {
     //Obtains the flashcard list form lovalstorage through a string,
@@ -77,15 +77,23 @@ export const manageLocalStorage = (params) => {
   //POST--------------------------------
   if (params.type === "POST") {
     const formatedData = convertToCleanData(data);
-    const cards = formatedData;
 
+    console.log(formatedData);
     //if the the post is not in local storage the below function handles it and adds it
     if (!localStorage.getItem(data.title)) {
-      return localStorage.setItem(data.title, JSON.stringify([cards]));
+      return localStorage.setItem(data.title, JSON.stringify(formatedData));
     }
+    const [newCards] = formatedData.cards;
     const json = localStorage.getItem(data.title);
     const savedFlashcards = JSON.parse(json);
 
-    return localStorage.setItem(data.title, JSON.stringify(savedFlashcards));
+    return localStorage.setItem(
+      data.title,
+      JSON.stringify({
+        title: formatedData.title,
+        cards: [newCards, ...savedFlashcards.cards],
+        key: formatedData.key,
+      })
+    );
   }
 };

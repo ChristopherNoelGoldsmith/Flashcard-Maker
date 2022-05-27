@@ -68,9 +68,24 @@ const Login = (params) => {
     });
   };
 
+  const guestAccountHandler = (event) => {
+    event.preventDefault();
+    manageServerUsers({
+      type: "POST",
+      data: {
+        username: "Guest",
+        password: "password",
+      },
+    });
+    dispatchLoginStatus(authActions.login({ username: "Guest" }));
+  };
+
   return (
     <Card>
-      <form className={"m-5 gy-3 justify-self"} onSubmit={loginHandler}>
+      <form
+        className={"container justify-content-center my-5"}
+        onSubmit={loginHandler}
+      >
         <AlertMessage
           classToggle={`${!usernameIsValid.status ? "vis" : ""}`}
           note={usernameIsValid.message}
@@ -92,6 +107,7 @@ const Login = (params) => {
         />
         <Button label={"LOGIN"} />
         <Button onClick={createAccountHandler} label={"CREATE ACCOUNT"} />
+        <Button onClick={guestAccountHandler} label={"GUEST"} />
       </form>
     </Card>
   );
