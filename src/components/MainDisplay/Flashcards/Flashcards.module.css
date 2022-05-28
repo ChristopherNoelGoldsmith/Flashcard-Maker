@@ -16,7 +16,22 @@
   height: 100%;
 }
 
-.flashcard .text-container p {
+.flashcard .text-container figure {
+  height: 90%;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  flex-direction: column;
+  border: 1px dotted seashell;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.flashcard .text-container figure:hover {
+  opacity: 0.9;
+}
+
+.flashcard .text-container figure p {
   box-sizing: border-box;
   height: fit-content;
   word-wrap: break-word;
@@ -28,7 +43,7 @@
   opacity: 0.7;
 }
 
-.flashcard .text-container .front {
+.flashcard .text-container figure .front {
   border-radius: 10px;
 }
 

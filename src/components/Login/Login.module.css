@@ -1,4 +1,5 @@
 form button {
   width: 100%;
   margin: 1rem;
+  overflow-x: hidden;
 }

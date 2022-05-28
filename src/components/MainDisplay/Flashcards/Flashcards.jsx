@@ -1,8 +1,8 @@
-import Card from "../../UI/Card";
-import styles from "./Flashcards.module.css";
-import Button from "../../UI/Button";
-import React, { useState, Fragment, useEffect } from "react";
-import { loadFlashcardList } from "../../../util/localStorageUtil";
+import Card from '../../UI/Card';
+import styles from './Flashcards.module.css';
+import Button from '../../UI/Button';
+import React, { useState, Fragment, useEffect } from 'react';
+import { loadFlashcardList } from '../../../util/localStorageUtil';
 
 // const filteredData = loadedFromServerFlashcardList.filter((card) => {
 //   if (card.title !== event) return false;
@@ -37,10 +37,12 @@ const flashCardListHandler = (props) => {
           <div
             id="text-container"
             onClick={flipEvent}
-            className={`${styles["text-container"]}`}
+            className={`${styles['text-container']}`}
           >
-            {!flipState && <p className={`${styles.front}`}>{question}</p>}
-            {flipState && <p className={`${styles.back}`}>{answer}</p>}
+            <figure>
+              {!flipState && <p className={`${styles.front}`}>{question}</p>}
+              {flipState && <p className={`${styles.back}`}>{answer}</p>}
+            </figure>
           </div>
         </div>
         <div className="row justify-content-around">
@@ -62,7 +64,7 @@ const flashCardListHandler = (props) => {
 };
 const Flashcards = (props) => {
   const [cardSide, setCardSide] = useState(false);
-  const [cardList, setCardList] = useState("");
+  const [cardList, setCardList] = useState('');
   const [flashcardIncriment, incrimentFlashcard] = useState(0);
   const flipCard = () => {
     setCardSide((flip) => !flip);
