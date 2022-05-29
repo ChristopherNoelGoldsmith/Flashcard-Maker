@@ -1,3 +1,4 @@
+import animations from '../../../animations.module.css';
 import styles from './MainForm.module.css';
 import Card from '../../UI/Card';
 import Input from '../../UI/Input';
@@ -58,18 +59,7 @@ const MainForm = () => {
       type: 'GET',
       target: cardState.title,
     });
-    // const deckExists = await manageServerData({
-    //   type: "GETALL", username: loginStatus.username
-    // });
-    // //checks the server to see if any flashcards of the same title exist.
-    // if (deckExists) {
-    //   manageServerData({
-    //     type: "PATCH",
-    //     data: saveForServer,
-    //     username: loginStatus.username,
-    //   });
-    //   return dispatchCardState({ type: "CLEAR" });
-    // }
+
     manageServerData({
       type: 'PATCH',
       data: saveForServer,
@@ -113,13 +103,13 @@ const MainForm = () => {
 
   const loadedCardList = loadFlashcardList(cardState.title);
   return (
-    <Card>
+    <Card className={`${animations['fade-in']}`}>
       <form
         onSubmit={formDataHandler}
-        className="container justify-content-center row my-5 mx-2"
+        className={`container-fluid justify-content-center row my-5 mx-2 `}
         action=""
       >
-        <h2 className="my-3">
+        <h2 className={`my-3`}>
           Construct Your Flashcards
           {loadedCardList && (
             <span className={`${styles['card-count']}`}>
@@ -128,7 +118,9 @@ const MainForm = () => {
           )}
         </h2>
         <AlertMessage
-          classToggle={`${isValidState.title ? 'vis' : ''}`}
+          classToggle={`${
+            isValidState.title ? `${animations['fade-in']}` : ''
+          }`}
           note={`Maximum Characters: ${maximum.title}`}
         />
         <Input

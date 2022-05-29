@@ -1,3 +1,15 @@
+@keyframes flip {
+    from {
+        transform: scaleX(0);
+        opacity: 0;
+    }
+
+    to {
+        transform: scaleX(1);
+        opacity: 1;
+    }
+}
+
 .module {
     position: fixed;
     width: 100vw;
@@ -10,11 +22,17 @@
 }
 
 .module p {
+    background: black;
+    border-radius: 5px;
+    width: 90%;
+    height: 90%;
+    padding: 10px;
     font-size: 1rem;
 }
 
 .module.vis {
-    width: 80%;
+    animation: flip 0.3s ease-out;
+    width: auto;
     opacity: 1;
     transition: all 1 ease;
 }

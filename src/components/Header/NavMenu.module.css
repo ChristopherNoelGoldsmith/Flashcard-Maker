@@ -4,6 +4,7 @@ nav {
   background: rgba(25, 25, 25, 0.8);
   width: 100vw;
   z-index: 100;
+  height: 7vh;
 }
 
 nav figure {

@@ -9,6 +9,7 @@ body {
   width: 100vw;
   color: ivory;
   background: url("./img/background.jpg");
+  background-size: cover;
 }
 
 body::after {

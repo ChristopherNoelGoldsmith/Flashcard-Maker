@@ -1,0 +1,31 @@
+@keyframes appear {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0px);
+        opacity: 1;
+    }
+}
+
+@keyframes grow-y {
+    from {
+        transform: scaleY(0);
+        opacity: 0;
+    }
+
+    to {
+        transform: scaleY(1);
+        opacity: 1;
+    }
+}
+
+.fade-in {
+    animation: appear 0.4s ease-in-out;
+}
+
+.appear-y {
+    animation: grow-y 0.3s ease-out;
+}
