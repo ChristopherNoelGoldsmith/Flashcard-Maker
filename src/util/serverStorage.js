@@ -1,13 +1,30 @@
 export const manageServerData = async (params) => {
   try {
+    console.log(params)
     if (params.type === "POST") {
       //const cleanData = convertToCleanData(params.data);
       const writeData = JSON.stringify(params.data);
 
       await fetch(
-        `https://make-some-flashcards-default-rtdb.firebaseio.com/users/${params.username}/cards/${params.data.title}/flashcards.json`,
+        `https://make-some-flashcards-default-rtdb.firebaseio.com/users/${params.username}/flashcards.json`,
         {
           method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: writeData,
+        }
+      );
+    }
+
+    if (params.type === "PUT") {
+      //const cleanData = convertToCleanData(params.data);
+      const writeData = JSON.stringify(params.data);
+
+      await fetch(
+        `https://make-some-flashcards-default-rtdb.firebaseio.com/users/${params.username}/flashcards.json`,
+        {
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
@@ -20,7 +37,7 @@ export const manageServerData = async (params) => {
       const writeData = JSON.stringify(params.data);
       console.log(writeData);
       await fetch(
-        `https://make-some-flashcards-default-rtdb.firebaseio.com/users/${params.username}/cards/${params.data.title}/flashcards.json`,
+        `https://make-some-flashcards-default-rtdb.firebaseio.com/users/${params.username}/flashcards.json`,
         {
           method: "PATCH",
           headers: {
@@ -49,10 +66,11 @@ export const manageServerData = async (params) => {
     if (params.type === "GETALL") {
       //turn saved into the username
       const response = await fetch(
-        `https://make-some-flashcards-default-rtdb.firebaseio.com/users/${params.username}/cards.json`
+        `https://make-some-flashcards-default-rtdb.firebaseio.com/users/${params.username}/flashcards.json`
       );
       const json = await response.json();
       const data = [];
+      console.log(json);
       //pulls the data from the json into a workable format from the app.
       for (const cardData in json) {
         data.push(json[cardData]);
@@ -75,6 +93,7 @@ export const manageServerData = async (params) => {
         }
       );
     }
+    return console.log('invalid call');
   } catch (err) {
     console.log(err);
   }

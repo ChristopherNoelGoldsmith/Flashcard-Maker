@@ -1,18 +1,19 @@
-import styles from "./NavMenu.module.css";
-import FlashcardList from "./FlashcardList";
-import Button from "../UI/Button";
-import React, { useState } from "react";
-import { manageLocalStorage } from "../../util/localStorageUtil";
-import { manageServerData } from "../../util/serverStorage";
-import { useSelector, useDispatch } from "react-redux";
-import { authActions } from "../../store/authentication";
+import styles from './NavMenu.module.css';
+import FlashcardList from './FlashcardList';
+import Button from '../UI/Button';
+import React, { useState } from 'react';
+//import { manageLocalStorage } from "../../util/localStorageUtil";
+import { manageServerData } from '../../util/serverStorage';
+import { useSelector, useDispatch } from 'react-redux';
+import { authActions } from '../../store/authentication';
 
 const NavMenu = (props) => {
   const [isVisable, setSavedCardsVisability] = useState(false);
 
   //
   const dispatch = useDispatch();
-  const loginStatus = useSelector((state) => state.auth);
+  const loginStatus = useSelector((store) => store.auth);
+  const flashCardList = useSelector((store) => store.cardList);
   //
   const changeActiveWindow = (target, ignore) => {
     if (props.activeWindow === ignore) return;
@@ -22,27 +23,22 @@ const NavMenu = (props) => {
   //creates an array of the flashcards available in the selected local storage key
   const loadData = async () => {
     const loadedFromServerFlashcardList = await manageServerData({
-      type: "GETALL",
+      type: 'GETALL',
       username: loginStatus.username,
     });
 
     if (!loadedFromServerFlashcardList.length) return;
 
     console.log(loadedFromServerFlashcardList);
-    return loadedFromServerFlashcardList.forEach((loadedData, index) => {
-      const { flashcards } = loadedData;
-
-      return manageLocalStorage({
-        type: "PATCH",
-        data: flashcards,
-      });
+    return loadedFromServerFlashcardList.map((loadedData, index) => {
+      return loadedData;
     });
   };
 
   const toggleSavedCards = async () => {
     if (!isVisable) await loadData();
     setSavedCardsVisability((visability) => !visability);
-    changeActiveWindow("MainForm", "Flashcard");
+    changeActiveWindow('MainForm', 'Flashcard');
   };
 
   const logoutHandler = () => {
@@ -55,7 +51,7 @@ const NavMenu = (props) => {
           label="CREATE"
           className="col-4 col-lg-2 my-1 my-lg-2"
           onClick={() => {
-            props.changeWindow("MainForm");
+            props.changeWindow('MainForm');
             if (isVisable) toggleSavedCards();
           }}
         />
@@ -67,7 +63,7 @@ const NavMenu = (props) => {
         <Button
           onClick={logoutHandler}
           className="col-4 col-lg-2 my-1 my-lg-2"
-          label={"LOGOUT"}
+          label={'LOGOUT'}
         />
       </figure>
 

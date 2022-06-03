@@ -6,26 +6,31 @@ import TextArea from '../../UI/TextArea';
 import AlertMessage from '../../UI/AlertMessage';
 import Button from '../../UI/Button';
 import { useReducer } from 'react';
-import {
-  loadFlashcardList,
-  manageLocalStorage,
-} from '../../../util/localStorageUtil';
 import { manageServerData } from '../../../util/serverStorage';
 import { useSelector } from 'react-redux';
+import useCardList from '../../hooks/useCardListManager';
 
 //Function that passes through the useReducer hook to handle the input form render in the dom
 const parseFormDataReducer = (state, action) => {
   if (action.type === 'CLEAR')
-    return { title: state.title, question: '', answer: '' };
+    return {
+      title: state.title,
+      cards: { question: '', answer: '' },
+      id: state.id,
+    };
   if (action.type === 'TITLE') state.title = action.title;
-  if (action.type === 'QUESTION') state.question = action.question;
-  if (action.type === 'ANSWER') state.answer = action.answer;
+  if (action.type === 'QUESTION') state.cards.question = action.question;
+  if (action.type === 'ANSWER') state.cards.answer = action.answer;
+
+  const card = {
+    question: state.cards.question || '',
+    answer: state.cards.answer || '',
+  };
 
   return {
     title: state.title,
-    question: state.question,
-    answer: state.answer,
-    key: Math.floor(Math.random() * 10000),
+    cards: card,
+    id: state.id || state.title + Math.floor(Math.random() * 10000),
   };
 };
 const checkValidityReducer = (state, action) => {
@@ -39,11 +44,26 @@ const checkValidityReducer = (state, action) => {
   };
 };
 
-const MainForm = () => {
-  const [cardState, dispatchCardState] = useReducer(parseFormDataReducer, {});
-  const [isValidState, dispatchValidity] = useReducer(checkValidityReducer, {});
+const blankCard = {
+  title: '',
+  cards: { question: '', answer: '' },
+};
 
+const MainForm = () => {
+  const [cardState, dispatchCardState] = useReducer(
+    parseFormDataReducer,
+    blankCard
+  );
+  const [isValidState, dispatchValidity] = useReducer(checkValidityReducer, {});
+  const [cardList, setCardList] = useCardList();
   const loginStatus = useSelector((state) => state.auth);
+  const sendToServer = (type) => {
+    return {
+      type,
+      username: loginStatus.username,
+      data: cardList,
+    };
+  };
   //params for max inputs
   const maximum = {
     title: 15,
@@ -51,33 +71,6 @@ const MainForm = () => {
     question: 500,
   };
   //----------------------
-  const formCRUD = async () => {
-    manageLocalStorage({ type: 'POST', data: cardState });
-    //localStorageSet(cardState);
-
-    const saveForServer = manageLocalStorage({
-      type: 'GET',
-      target: cardState.title,
-    });
-
-    manageServerData({
-      type: 'PATCH',
-      data: saveForServer,
-      username: loginStatus.username,
-    });
-    dispatchCardState({ type: 'CLEAR' });
-  };
-
-  const formDataHandler = async (event) => {
-    event.preventDefault();
-    if (!loadedCardList && localStorage.length >= 10)
-      return alert(
-        `You cannot add any new flashcard sets before deleteing some. (MAX: ${maximum.title})`
-      );
-    console.log(cardState);
-
-    await formCRUD();
-  };
 
   //Hanlders for the titular elements of the form
   const titleChangeHanlder = (event) => {
@@ -101,22 +94,22 @@ const MainForm = () => {
     dispatchValidity({ type: 'ANSWER', answer: false });
   };
 
-  const loadedCardList = loadFlashcardList(cardState.title);
+  const formDataHandler = (event) => {
+    event.preventDefault();
+
+    const writeData = sendToServer('PUT');
+    setCardList(cardState);
+    dispatchCardState({ type: 'CLEAR' });
+    manageServerData({ writeData });
+  };
+
   return (
     <Card className={`${animations['fade-in']}`}>
       <form
         onSubmit={formDataHandler}
         className={`container-fluid justify-content-center row my-5 mx-2 `}
-        action=""
       >
-        <h2 className={`my-3`}>
-          Construct Your Flashcards
-          {loadedCardList && (
-            <span className={`${styles['card-count']}`}>
-              - Cards: {loadedCardList.length}
-            </span>
-          )}
-        </h2>
+        <h2 className={`my-3`}>Construct Your Flashcards</h2>
         <AlertMessage
           classToggle={`${
             isValidState.title ? `${animations['fade-in']}` : ''
@@ -139,7 +132,7 @@ const MainForm = () => {
           onChange={questionChangeHanlder}
           label="Card Front (QUESTION)"
           className={`m-1 ${isValidState.question && styles['invalid']}`}
-          value={cardState.question || ''}
+          value={cardState.cards.question || ''}
           required
         ></TextArea>
         <AlertMessage
@@ -150,7 +143,7 @@ const MainForm = () => {
           onChange={answerChangeHanlder}
           label="Card Back (ANSWER)"
           className={`m-1 ${isValidState.answer && styles['invalid']}`}
-          value={cardState.answer || ''}
+          value={cardState.cards.answer || ''}
           required
         ></TextArea>
         <Button type="submit" label="CREATE" />
