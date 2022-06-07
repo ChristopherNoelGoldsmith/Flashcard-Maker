@@ -13,7 +13,6 @@ const NavMenu = (props) => {
   //
   const dispatch = useDispatch();
   const loginStatus = useSelector((store) => store.auth);
-  const flashCardList = useSelector((store) => store.cardList);
   //
   const changeActiveWindow = (target, ignore) => {
     if (props.activeWindow === ignore) return;
@@ -38,7 +37,7 @@ const NavMenu = (props) => {
   const toggleSavedCards = async () => {
     if (!isVisable) await loadData();
     setSavedCardsVisability((visability) => !visability);
-    changeActiveWindow('MainForm', 'Flashcard');
+    changeActiveWindow('MAINFORM', 'FLASHCARD');
   };
 
   const logoutHandler = () => {
@@ -51,7 +50,7 @@ const NavMenu = (props) => {
           label="CREATE"
           className="col-4 col-lg-2 my-1 my-lg-2"
           onClick={() => {
-            props.changeWindow('MainForm');
+            props.changeWindow('MAINFORM');
             if (isVisable) toggleSavedCards();
           }}
         />
@@ -70,7 +69,7 @@ const NavMenu = (props) => {
       {isVisable && (
         <FlashcardList
           setSavedCardsVisability={setSavedCardsVisability}
-          chosenFlashCard={props.chosenFlashCard}
+          setFlashCard={props.setFlashCard}
           changeWindow={props.changeWindow}
         />
       )}
