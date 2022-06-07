@@ -9,7 +9,7 @@ const FlashcardListItem = (props) => {
       <label className="col-9" htmlFor="">
         {props.children}
       </label>
-      <Button className="col-3" label="Del"></Button>
+      <Button onClick={props.deleteItem} className="col-3" label="Del"></Button>
     </li>
   );
 };

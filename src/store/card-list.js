@@ -54,12 +54,17 @@ const cardListSlice = createSlice({
         },
         deleteCard(state, action) {
             //takes the id of the card in state and compares it to the id of the action and removes all matches.
-            return state = current(state).filter(cards => {
+            console.log(action)
+            state = current(state).filter(cards => {
                 if (cards.id !== action.payload.id) return true;
                 return false;
             });
+            return state;
         },
         patchCard(state, action) { },
+        loadList(state, action) {
+            return state = action.payload
+        }
     }
 });
 

@@ -1,6 +1,5 @@
 export const manageServerData = async (params) => {
   try {
-    console.log(params)
     if (params.type === "POST") {
       //const cleanData = convertToCleanData(params.data);
       const writeData = JSON.stringify(params.data);
@@ -15,6 +14,7 @@ export const manageServerData = async (params) => {
           body: writeData,
         }
       );
+      return
     }
 
     if (params.type === "PUT") {
@@ -31,11 +31,11 @@ export const manageServerData = async (params) => {
           body: writeData,
         }
       );
+      return
     }
 
     if (params.type === "PATCH") {
       const writeData = JSON.stringify(params.data);
-      console.log(writeData);
       await fetch(
         `https://make-some-flashcards-default-rtdb.firebaseio.com/users/${params.username}/flashcards.json`,
         {
@@ -70,7 +70,6 @@ export const manageServerData = async (params) => {
       );
       const json = await response.json();
       const data = [];
-      console.log(json);
       //pulls the data from the json into a workable format from the app.
       for (const cardData in json) {
         data.push(json[cardData]);
@@ -83,15 +82,16 @@ export const manageServerData = async (params) => {
     if (params.type === "DELETE") {
       //turn saved into the username
       await fetch(
-        `https://make-some-flashcards-default-rtdb.firebaseio.com/users//${params.username}/cards/${params.title}.json`,
+        `https://make-some-flashcards-default-rtdb.firebaseio.com/users//${params.username}/flashcards.json`,
         {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
           },
-          id: 1,
+          id: 1
         }
       );
+      return
     }
     return console.log('invalid call');
   } catch (err) {
@@ -119,7 +119,7 @@ export const manageServerUsers = async (params) => {
     if (params.type === "POST") {
       const userNameIsTaken = await checkIfUserInServer(params);
 
-      if (userNameIsTaken) throw { error: "USERNAME TAKEN", data: params };
+      if (userNameIsTaken) return;
 
       const writeData = { userData: params.data };
       await fetch(

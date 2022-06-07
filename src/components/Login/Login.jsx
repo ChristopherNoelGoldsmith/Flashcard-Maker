@@ -7,9 +7,10 @@ import { useReducer, useState } from 'react';
 import {
   manageServerUsers,
   checkIfUserInServer,
+  manageServerData,
 } from '../../util/serverStorage';
 import { authActions } from '../../store/authentication';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { moduleActions } from '../../store/module';
 
 const checkIfUserInfoValid = (info) => {
@@ -56,10 +57,10 @@ const Login = (params) => {
   const [passwordIsValid, setPasswordIsValid] = useState({ status: true });
 
   //Redux tools
-  const loginStatus = useSelector((state) => state.auth);
-  const dispatchStore = useDispatch();
+  const dispatch = useDispatch();
 
   //
+
   const usernameHandler = (event) => {
     if (event.target.value.length > 16) return;
     dispatchInput({ type: 'USERNAME', username: event.target.value });
@@ -74,7 +75,7 @@ const Login = (params) => {
   const validation = async (call) => {
     const validUser = checkIfUserInfoValid(inputState);
     if (validUser.status !== true) {
-      dispatchStore(moduleActions.display(validUser));
+      dispatch(moduleActions.display(validUser));
       return { status: false, message: validUser.message };
     }
     //checks if the account exists on the server
@@ -97,7 +98,7 @@ const Login = (params) => {
     event.preventDefault();
     const isValid = await validation({ type: 'SERVER' });
     if (!isValid.status) return dispatchInput(moduleActions.display(isValid));
-    dispatchStore(authActions.login({ username: inputState.username }));
+    dispatch(authActions.login({ username: inputState.username }));
   };
 
   const createAccountHandler = async (event) => {
@@ -114,16 +115,16 @@ const Login = (params) => {
     });
   };
 
-  const guestAccountHandler = (event) => {
+  const guestAccountHandler = async (event) => {
     event.preventDefault();
-    manageServerUsers({
+    await manageServerUsers({
       type: 'POST',
       data: {
         username: 'Guest',
         password: '$password',
       },
     });
-    dispatchStore(authActions.login({ username: 'Guest' }));
+    dispatch(authActions.login({ username: 'Guest' }));
   };
 
   return (

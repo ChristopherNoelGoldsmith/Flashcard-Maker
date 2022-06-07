@@ -3,9 +3,6 @@ import { useEffect, useReducer, useState } from 'react';
 import { cardListAction } from '../../store/card-list';
 
 const useCardList = () => {
-
-    //    const [cardState, useCardState] = useState();
-
     const dispatch = useDispatch();
     const cardList = useSelector(store => store.cardList);
     const useCardState = (e) => (dispatch(cardListAction.addCard(e)));

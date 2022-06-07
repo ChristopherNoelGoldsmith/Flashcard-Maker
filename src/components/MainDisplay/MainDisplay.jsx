@@ -11,7 +11,6 @@ const MainDisplay = (props) => {
   const changeActiveWindowHandler = (target) => {
     setActiveWindow(target);
   };
-  console.log(chosenFlashCardList);
   return (
     <div className={`row container-fluid justify-content-center my-5`}>
       <NavMenu

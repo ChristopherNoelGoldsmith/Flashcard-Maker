@@ -6,36 +6,20 @@ import React, { useState } from 'react';
 import { manageServerData } from '../../util/serverStorage';
 import { useSelector, useDispatch } from 'react-redux';
 import { authActions } from '../../store/authentication';
+import { cardListAction } from '../../store/card-list';
 
 const NavMenu = (props) => {
   const [isVisable, setSavedCardsVisability] = useState(false);
 
   //
   const dispatch = useDispatch();
-  const loginStatus = useSelector((store) => store.auth);
   //
   const changeActiveWindow = (target, ignore) => {
     if (props.activeWindow === ignore) return;
     props.changeWindow(target);
   };
 
-  //creates an array of the flashcards available in the selected local storage key
-  const loadData = async () => {
-    const loadedFromServerFlashcardList = await manageServerData({
-      type: 'GETALL',
-      username: loginStatus.username,
-    });
-
-    if (!loadedFromServerFlashcardList.length) return;
-
-    console.log(loadedFromServerFlashcardList);
-    return loadedFromServerFlashcardList.map((loadedData, index) => {
-      return loadedData;
-    });
-  };
-
-  const toggleSavedCards = async () => {
-    if (!isVisable) await loadData();
+  const toggleSavedCards = () => {
     setSavedCardsVisability((visability) => !visability);
     changeActiveWindow('MAINFORM', 'FLASHCARD');
   };

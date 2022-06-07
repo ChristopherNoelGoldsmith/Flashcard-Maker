@@ -5,10 +5,11 @@ import Input from '../../UI/Input';
 import TextArea from '../../UI/TextArea';
 import AlertMessage from '../../UI/AlertMessage';
 import Button from '../../UI/Button';
-import { useReducer } from 'react';
+import { useReducer, useEffect } from 'react';
 import { manageServerData } from '../../../util/serverStorage';
 import { useSelector } from 'react-redux';
 import useCardList from '../../hooks/useCardListManager';
+import useUserStorage from '../../hooks/useUserStorage';
 
 //Function that passes through the useReducer hook to handle the input form render in the dom
 const parseFormDataReducer = (state, action) => {
@@ -54,9 +55,12 @@ const MainForm = () => {
     parseFormDataReducer,
     blankCard
   );
+  //Hooks
   const [isValidState, dispatchValidity] = useReducer(checkValidityReducer, {});
   const [cardList, setCardList] = useCardList();
   const loginStatus = useSelector((state) => state.auth);
+  useUserStorage();
+  //
   const sendToServer = (type) => {
     return {
       type,
@@ -100,7 +104,7 @@ const MainForm = () => {
     const writeData = sendToServer('PUT');
     setCardList(cardState);
     dispatchCardState({ type: 'CLEAR' });
-    manageServerData({ writeData });
+    manageServerData(writeData);
   };
 
   return (
